@@ -10,16 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class MenuCategory {
-    
-    @Id
+public class TableCategory {
+    @Id    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String categoryName;
+    private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Menu> menus;
+    @OneToMany(mappedBy = "tableCategory", cascade = CascadeType.ALL)
+    private List<Table> tables;
 
     public Long getId() {
         return id;
@@ -29,21 +28,19 @@ public class MenuCategory {
         this.id = id;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public String getName() {
+        return name;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public List<Menu> getMenus() {
-        return menus;
+    public List<Table> getTables() {
+        return tables;
     }
 
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus;
+    public void setTables(List<Table> tables) {
+        this.tables = tables;
     }
-
-
 }

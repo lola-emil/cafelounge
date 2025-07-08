@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/menu")
 public class MenuController {
+    
     @GetMapping
     String menuPage(Model model) {
         List<String> menuCategories = new ArrayList<String>();
