@@ -37,3 +37,5 @@ build/
 ### Node ###
 node_modules
 yarn.lock
+
+application-dev.properties
