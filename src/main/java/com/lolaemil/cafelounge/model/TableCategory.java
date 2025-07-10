@@ -18,7 +18,7 @@ public class TableCategory {
     private String name;
 
     @OneToMany(mappedBy = "tableCategory", cascade = CascadeType.ALL)
-    private List<Table> tables;
+    private List<DiningTable> tables;
 
     public Long getId() {
         return id;
@@ -36,11 +36,11 @@ public class TableCategory {
         this.name = name;
     }
 
-    public List<Table> getTables() {
+    public List<DiningTable> getTables() {
         return tables;
     }
 
-    public void setTables(List<Table> tables) {
+    public void setTables(List<DiningTable> tables) {
         this.tables = tables;
     }
 }

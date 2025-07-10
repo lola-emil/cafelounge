@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CafeLounge | Order History</title>
+
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body>
+    <div class="drawer">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content">
+            <!-- Page content here -->
+            <div class="navbar bg-base-100 shadow-sm">
+                <div class="flex-none">
+                    <label for="my-drawer" class="btn btn-square btn-ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            class="inline-block h-5 w-5 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16">
+                            </path>
+                        </svg>
+                    </label>
+                </div>
+                <div class="flex-1 ml-5">
+                    <p>Activity / <small>Order History</small></p>
+                </div>
+                <div class="flex-none">
+                    <button class="btn btn-square btn-ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            class="inline-block h-5 w-5 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex min-h-[calc(100vh-64px-1.25rem)] px-3 gap-3 mt-5">
+                <div class="min-w-xs flex flex-col">
+                    <a href="/activity/billing-queue" class="rounded-md p-3">Billing
+                        Queue</a>
+                    <a href="/activity/order-history" class="rounded-md bg-primary p-3 text-primary-content">Order
+                        History</a>
+                    <a href="/activity/tables" class="rounded-md p-3">Tables</a>
+                </div>
+
+                <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span>Date: </span>
+                            <div class="flex items-center gap-3">
+                                <input type="datetime-local" class="input">
+                                -
+                                <input type="datetime-local" class="input">
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <input type="text" class="input" placeholder="Search">
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table mt-5 w-full">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date & Time</th>
+                                <th>Customer Name</th>
+                                <th>Order Status</th>
+                                <th>Total Payment</th>
+                                <th align="center">Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>006</td>
+                                <td>25/05/2024 - 08:00 AM</td>
+                                <td>George</td>
+                                <td>Done</td>
+                                <td>PHP 53.00</td>
+                                <td align="center">
+                                    <a href="" class="link link-primary">Detail</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>006</td>
+                                <td>25/05/2024 - 08:00 AM</td>
+                                <td>George</td>
+                                <td>Done</td>
+                                <td>PHP 53.00</td>
+                                <td align="center">
+                                    <a href="" class="link link-primary">Detail</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>006</td>
+                                <td>25/05/2024 - 08:00 AM</td>
+                                <td>George</td>
+                                <td>Done</td>
+                                <td>PHP 53.00</td>
+                                <td align="center">
+                                    <a href="" class="link link-primary">Detail</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>006</td>
+                                <td>25/05/2024 - 08:00 AM</td>
+                                <td>George</td>
+                                <td>Done</td>
+                                <td>PHP 53.00</td>
+                                <td align="center">
+                                    <a href="" class="link link-primary">Detail</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="drawer-side">
+            <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+            <div class="bg-base-200 text-base-content min-h-full w-80 flex flex-col justify-between">
+                <div class="w-full">
+                    <button class="btn btn-ghost w-full"></button>
+                </div>
+                <ul class="menu menu-lg w-full p-4 flex-1">
+                    <li><a href="/menu">Point of Sales</a></li>
+                    <li><a href="/activity">Activity</a></li>
+                    <li><a href="/report">Report</a></li>
+                    <li><a href="/inventory">Inventory</a></li>
+                    <li><a href="/teams">Teams</a></li>
+                </ul>
+                <div>
+                    <a href="/" class="btn btn-ghost w-full">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

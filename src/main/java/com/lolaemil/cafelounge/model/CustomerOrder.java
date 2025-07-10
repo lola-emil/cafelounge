@@ -12,14 +12,14 @@ import jakarta.persistence.Id;
 // TODO: Add order status
 
 @Entity
-public class Order {
+public class CustomerOrder {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String customerName;
-    String orderNumber;
+    private String customerName;
+    private String orderNumber;
     
     @CreatedDate
     private LocalDateTime createdDate;
@@ -38,5 +38,21 @@ public class Order {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

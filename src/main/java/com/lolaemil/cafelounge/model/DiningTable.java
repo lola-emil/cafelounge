@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 // TODO: add table status (available, served, reserved)
 
 @Entity
-public class Table {
+public class DiningTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
