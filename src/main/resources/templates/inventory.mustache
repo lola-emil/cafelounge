@@ -1,11 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cafelounge | Inventory</title>
-</head>
-<body>
-    
-</body>
-</html>
+{{<_layout}}
+{{$title}}CafeLounge | Inventory{{/title}}
+
+
+
+{{<partials/navbar}}
+    {{$title}}Inventory{{/title}}
+{{/partials/navbar}}
+
+
+{{$content}}
+    {{>partials/navbar}}
+
+    <main class="px-5">
+        <h1>Hello, World</h1>
+    </main>
+
+
+{{/content}}
+
+
+{{$scripts}}
+{{/scripts}}
+
+
+{{/_layout}}

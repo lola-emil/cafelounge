@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.lolaemil.cafelounge.model.User;
 import com.lolaemil.cafelounge.repository.UserRepository;
-import com.lolaemil.cafelounge.util.CustomUserDetails;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

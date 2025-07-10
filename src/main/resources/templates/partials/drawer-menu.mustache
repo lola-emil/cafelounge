@@ -1,0 +1,16 @@
+<div class="w-full">
+    <button class="btn btn-ghost w-full"></button>
+</div>
+<ul class="menu menu-lg w-full p-4 flex-1">
+    <li><a href="/menu">Point of Sales</a></li>
+    <li><a href="/activity">Activity</a></li>
+    <li><a href="/report">Report</a></li>
+    <li><a href="/inventory">Inventory</a></li>
+    <li><a href="/teams">Teams</a></li>
+</ul>
+<div>
+    <form action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+        <button class="btn btn-ghost w-full" type="submit">Logout</button>
+    </form>
+</div>

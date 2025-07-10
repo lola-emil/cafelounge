@@ -105,19 +105,7 @@
         <div class="drawer-side">
             <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
             <div class="bg-base-200 text-base-content min-h-full w-80 flex flex-col justify-between">
-                <div class="w-full">
-                    <button class="btn btn-ghost w-full"></button>
-                </div>
-                <ul class="menu menu-lg w-full p-4 flex-1">
-                    <li><a href="/menu">Point of Sales</a></li>
-                    <li><a href="/activity">Activity</a></li>
-                    <li><a href="/report">Report</a></li>
-                    <li><a href="/inventory">Inventory</a></li>
-                    <li><a href="/teams">Teams</a></li>
-                </ul>
-                <div>
-                    <a href="/" class="btn btn-ghost w-full">Logout</a>
-                </div>
+                {{> partials/drawer-menu}}
             </div>
         </div>
     </div>
