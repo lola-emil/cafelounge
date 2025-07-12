@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import com.lolaemil.cafelounge.model.User;
 import com.lolaemil.cafelounge.model.UserRole;
@@ -20,7 +21,8 @@ import com.lolaemil.cafelounge.service.CustomUserDetailsService;
 @Configuration
 public class WebSecurityConfig {
 
-    @Autowired UserRoleRepository userRoleRepository; 
+    @Autowired
+    UserRoleRepository userRoleRepository;
 
     private final CustomUserDetailsService userDetailsService;
 
@@ -30,15 +32,15 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/css/**").permitAll()
-                .anyRequest()
-                .authenticated())
+        http
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // important!
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/css/**").permitAll()
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .failureUrl("/login?error=true")
-                        .usernameParameter("username")
-                        .defaultSuccessUrl("/", true)
                         .permitAll())
                 .logout(logout -> logout.permitAll());
 
@@ -64,7 +66,7 @@ public class WebSecurityConfig {
             if (repo.findByUsername("admin").isEmpty()) {
                 UserRole userRole = new UserRole();
                 userRole.setRole("ADMIN");
-                
+
                 userRoleRepository.save(userRole);
 
                 User user = new User();

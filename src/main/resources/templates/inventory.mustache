@@ -1,26 +1,108 @@
-{{<_layout}}
-{{$title}}CafeLounge | Inventory{{/title}}
+{{<_layout}} {{ $title }}CafeLounge | Inventory{{/title}} {{ $content }} {{<partials/navbar}} {{ $title }} Inventory
+  {{/title}} {{/partials/navbar}} <main class="px-5">
+  <div class="flex items-center justify-between">
+    <div class="flex gap-5">
+      <div class="flex items-center gap-3">
+        <div class="rounded-full h-2 w-2 bg-neutral-500"></div>
+        <span>Available</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="rounded-full h-2 w-2 bg-primary"></div>
+        <span>Served</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="rounded-full h-2 w-2 bg-secondary"></div>
+        <span>Reserved</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center gap-5">
+        <input type="text" class="input" placeholder="Search" />
+
+        <Button class="btn btn-primary" onclick="my_modal_2.showModal()">Add Item</Button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item Code</th>
+          <th>Photo</th>
+          <th>Item Name</th>
+          <th>Item Group</th>
+          <th>Last Purchase</th>
+          <th>On Hand</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Inventory List -->
+      </tbody>
+    </table>
+  </div>
+  </main>
+
+  <!-- Open the modal using ID.showModal() method -->
+  <dialog id="my_modal_2" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold">Add Item</h3>
+
+      <form action="" id="add-item-form" class="flex flex-col gap-3">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+        <input type="text" class="input w-full" name="name" placeholder="Name">
+        <textarea id="" class="textarea w-full" name="description" placeholder="Description"></textarea>
+
+        <button class="btn btn-primary w-full">Submit</button>
+      </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+
+      <button>close</button>
+    </form>
+  </dialog>
+
+  {{/content}}
+
+  {{ $scripts }}
+  <script>
+    const addItemForm = document.getElementById("add-item-form");
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+    addItemForm.addEventListener("submit", async evt => {
+      evt.preventDefault();
+
+      const formData = new FormData(evt.target);
+      const body = Object.fromEntries(formData.entries());
 
 
+      let token = body._csrf;
 
-{{<partials/navbar}}
-    {{$title}}Inventory{{/title}}
-{{/partials/navbar}}
+      delete body._csrf;
 
+      const res = await fetch("/api/menus", {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+          "X-XSRF-TOKEN": token
+        }
+      });
 
-{{$content}}
-    {{>partials/navbar}}
+      const data = await res.json();
 
-    <main class="px-5">
-        <h1>Hello, World</h1>
-    </main>
+      console.log(data);
+    });
 
+  </script>
+  {{/scripts}}
 
-{{/content}}
-
-
-{{$scripts}}
-{{/scripts}}
-
-
-{{/_layout}}
+  {{/_layout}}
