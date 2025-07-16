@@ -1,0 +1,13 @@
+package com.syntaxerror.cafelounge;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class CafeloungeApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
