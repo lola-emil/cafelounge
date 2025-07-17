@@ -1,0 +1,85 @@
+{
+    "products": [
+  {
+    "id": 1,
+    "name": "Classic Cheeseburger",
+    "category": "Burgers",
+    "price": 8.99,
+    "sku": "BRG-001",
+    "description": "Beef patty with cheddar cheese, lettuce, tomato, and pickles",
+    "taxable": true,
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "Veggie Burger",
+    "category": "Burgers",
+    "price": 7.99,
+    "sku": "BRG-002",
+    "description": "Plant-based patty with vegan mayo, lettuce, and tomato",
+    "taxable": true,
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "Fries (Regular)",
+    "category": "Sides",
+    "price": 2.99,
+    "sku": "SID-001",
+    "description": "Crispy golden fries",
+    "taxable": true,
+    "available": true
+  },
+  {
+    "id": 4,
+    "name": "Onion Rings",
+    "category": "Sides",
+    "price": 3.49,
+    "sku": "SID-002",
+    "description": "Beer-battered onion rings",
+    "taxable": true,
+    "available": false
+  },
+  {
+    "id": 5,
+    "name": "Soda (Large)",
+    "category": "Drinks",
+    "price": 1.99,
+    "sku": "DRK-001",
+    "description": "Choice of cola, lemon-lime, or root beer",
+    "taxable": true,
+    "available": true
+  },
+  {
+    "id": 6,
+    "name": "Bottled Water",
+    "category": "Drinks",
+    "price": 1.49,
+    "sku": "DRK-002",
+    "description": "16.9 oz bottled spring water",
+    "taxable": false,
+    "available": true
+  },
+  {
+    "id": 7,
+    "name": "Grilled Chicken Sandwich",
+    "category": "Sandwiches",
+    "price": 9.49,
+    "sku": "SND-001",
+    "description": "Grilled chicken breast with lettuce, tomato, and mayo",
+    "taxable": true,
+    "available": true
+  },
+  {
+    "id": 8,
+    "name": "Caesar Salad",
+    "category": "Salads",
+    "price": 6.99,
+    "sku": "SAL-001",
+    "description": "Romaine lettuce, parmesan, croutons, Caesar dressing",
+    "taxable": true,
+    "available": true
+  }
+]
+
+}
