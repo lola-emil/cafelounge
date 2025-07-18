@@ -13,6 +13,9 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    // TODO: butanganan pa ni siya ug reference sa product
+
+
     @ManyToOne
     @JoinColumn(name = "cart_id")
     Cart cart;
