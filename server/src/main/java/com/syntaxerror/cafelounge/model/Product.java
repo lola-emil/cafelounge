@@ -78,5 +78,29 @@ public class Product {
         this.price = price;
     }
 
+    public List<ProductStock> getProductStocks() {
+        return productStocks;
+    }
+
+    public void setProductStocks(List<ProductStock> productStocks) {
+        this.productStocks = productStocks;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     
 }
