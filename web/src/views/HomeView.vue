@@ -1,37 +1,80 @@
 <script setup lang="ts">
 import ProductCard from "@/components/ProductCard.vue";
-import { reactive, ref, onMounted, computed } from "vue";
+import AddProductModal from "@/components/AddProductModal.vue";
+
+import { reactive, ref, onMounted, computed, onUnmounted } from "vue";
 
 import * as productService from "../services/product-service";
+import axios from "axios";
 
-let itemCategories = ["Burgers", "Pizza", "Ice Cream", "Drink"];
+// let itemCategories = ["Burgers", "Pizza", "Ice Cream", "Drink"];
 
 let products = ref<productService.Product[]>([]);
+let productsLoaded = ref<boolean>(false);
+let errorMessage = ref<string | null>(null);
 
 let cartItems = reactive<productService.Product[]>([]);
+
+let productAbortController: AbortController | null = null;
 
 let summary = computed(() => {
   const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
   let discount = 0;
   let tax = 0;
-  
+
   return {
     subtotal: subtotal.toFixed(2),
     discount: discount.toFixed(2),
     tax: tax.toFixed(2),
     total: (subtotal - discount + tax).toFixed(2)
   }
-})
+});
 
 function addToCart(product: productService.Product) {
   cartItems.push(product);
 }
 
-onMounted(async () => {
-  const data = await productService.getProducts();
-  console.log(data);
+function fetchProducts() {
+  productAbortController?.abort();
 
-  products.value = data;
+  productAbortController = new AbortController();
+
+  productsLoaded.value = false;
+  productService.getProducts(productAbortController.signal)
+    .then(data => {
+      productsLoaded.value = true;
+      products.value = data;
+    }).catch(error => {
+
+      if (axios.isCancel(error)) {
+        console.log("Request cancelled");
+        return;
+      }
+
+      errorMessage.value = "Error fetching products";
+      productsLoaded.value = true;
+
+      console.error(error);
+    });
+}
+
+
+let modalRef = ref<InstanceType<typeof AddProductModal> | null>(null);
+
+function openModal() {
+  modalRef.value?.open();
+}
+
+function closeModal() {
+  modalRef.value?.close();
+}
+
+onMounted(async () => {
+  fetchProducts();
+});
+
+onUnmounted(() => {
+  productAbortController?.abort();
 });
 </script>
 
@@ -40,7 +83,7 @@ onMounted(async () => {
     <div class="flex justify-between items-center">
       <h3 class="text-2xl font-semibold">Point of sales</h3>
 
-      <button class="btn btn-primary">Add Product</button>
+      <button class="btn btn-primary" @click="openModal()">Add Product</button>
     </div>
 
     <div class="mt-5 flex gap-5 flex-1">
@@ -58,12 +101,19 @@ onMounted(async () => {
 
             <!-- Categories -->
             <div class="flex gap-3 mt-3">
-              <div class="card bg-base-300 w-40" v-for="category in itemCategories">
+              <div class="card bg-base-300 w-40">
+                <div class="card-body p-2">
+                  <span class="font-semibold">All</span>
+                  <small>{{ 0 }} items</small>
+                </div>
+              </div>
+              
+              <!-- <div class="card bg-base-300 w-40" v-for="category in itemCategories">
                 <div class="card-body p-2">
                   <span class="font-semibold">{{ category }}</span>
                   <small>{{ 9 }} items</small>
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <div class="flex justify-between w-full my-3">
@@ -71,7 +121,7 @@ onMounted(async () => {
               <div>
                 <p>
                   <span class="font-semibold">Showing </span>
-                  <span>{{ 36 }} Results</span>
+                  <span>{{ products.length }} Results</span>
                 </p>
               </div>
             </div>
@@ -80,14 +130,20 @@ onMounted(async () => {
           <!-- Product List -->
           <!-- I want this section to be scrollable as well -->
           <div class="grid grid-cols-3 gap-5 flex-1 pr-1">
-            <ProductCard
-              v-for="item in products"
-              @click="addToCart(item)"
+            <div class="card bg-base-300 skeleton" v-if="!productsLoaded" v-for="n in 6" :key="n">
+            </div>
+
+            <ProductCard v-for="item in products" @click="addToCart(item)"
               img="https://cdn.prod.website-files.com/631b4b4e277091ef01450237/686e703d7cc50185a9667d87_BBQ_Brisket_1_Jr%20(1).jpg"
-              :description="item.description"
-              :product="item.name"
-              :price="item.price"
-            />
+              :description="item.description" :product="item.name" :price="item.price" />
+
+            <div class="text-center col-span-3 gap-3 flex flex-col items-center justify-center"
+              v-if="productsLoaded && products.length == 0">
+              <div>
+                <p class="text-xl font-semibold">{{ errorMessage ?? "No items to display." }}</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" v-if="errorMessage" @click="fetchProducts()">Reload</button>
+            </div>
           </div>
         </div>
       </div>
@@ -146,4 +202,6 @@ onMounted(async () => {
       </div>
     </div>
   </main>
+
+  <AddProductModal ref="modalRef" />
 </template>
