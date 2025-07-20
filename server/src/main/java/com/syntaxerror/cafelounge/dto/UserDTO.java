@@ -1,10 +1,17 @@
 package com.syntaxerror.cafelounge.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class UserDTO {
     private String name;
 
+    @NotBlank
+    @NotNull
     private String username;
 
+    @NotBlank
+    @NotNull
     private String password;
 
     public String getName() {

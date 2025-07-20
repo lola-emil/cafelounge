@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.syntaxerror.cafelounge.dto.ProductDTO;
 import com.syntaxerror.cafelounge.model.Product;
@@ -52,9 +51,12 @@ public class ProductController {
 
     @GetMapping("/{id}")
     ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product product = productRepo.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
-        return ResponseEntity.status(HttpStatus.OK).body(product);
+        Optional<Product> product = productRepo.findById(id);
+
+        if (!product.isPresent())
+            return ResponseEntity.notFound().build();
+        
+        return ResponseEntity.status(HttpStatus.OK).body(product.get());
     }
 
     @PostMapping
