@@ -3,7 +3,7 @@ const props = defineProps(["product", "description", "price", "img"]);
 </script>
 
 <template>
-    <div class="card bg-base-300 shadow relative">
+    <div class="card bg-base-300 shadow relative h-max">
         <div class="card-body p-4">
             <div class="w-full bg-white">
                 <img :src="props.img" class="w-full object-contain rounded">

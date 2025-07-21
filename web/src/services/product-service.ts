@@ -1,7 +1,4 @@
-import axios from "axios";
-
-const apiURL = "http://localhost:8080/products";
-
+import { axiosInstance } from "@/utils/axiosInstance";
 export interface Product {
   id: number;
   name: string;
@@ -10,28 +7,13 @@ export interface Product {
 }
 
 export async function getProducts(signal?: AbortSignal) {
-  const res = await axios.get<Product[]>(apiURL, {
+  const res = await axiosInstance.get("/products", {
     signal,
   });
-  return res.data;
+  return res.data.content;
 }
 
-export async function addProduct(product: Partial<Product>) {
-  const res = await axios.post<Product>(apiURL, product, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return res.data;
-}
-
-export async function postProduct(product: Partial<Product>) {
-  const res = await axios.patch<Product>(apiURL, product, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
+export async function addProduct(data: Partial<Product>, signal?: AbortSignal): Promise<Product> {
+  const res = await axiosInstance.post("/products", data, { signal });
   return res.data;
 }

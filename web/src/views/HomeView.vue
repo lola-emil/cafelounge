@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ProductCard from "@/components/ProductCard.vue";
 import AddProductModal from "@/components/AddProductModal.vue";
+import Navbar from "@/components/Navbar.vue";
 
 import { reactive, ref, onMounted, computed, onUnmounted } from "vue";
 
@@ -79,6 +80,10 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <header>
+    <Navbar />
+  </header>
+
   <main class="px-10 mt-5">
     <div class="flex justify-between items-center">
       <h3 class="text-2xl font-semibold">Point of sales</h3>
@@ -107,7 +112,7 @@ onUnmounted(() => {
                   <small>{{ 0 }} items</small>
                 </div>
               </div>
-              
+
               <!-- <div class="card bg-base-300 w-40" v-for="category in itemCategories">
                 <div class="card-body p-2">
                   <span class="font-semibold">{{ category }}</span>
