@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,21 +20,22 @@ import jakarta.persistence.OneToMany;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String productCode;
+    private String productCode;
 
-    String name;
+    private String name;
 
-    String description;
+    private String description;
 
-    double price;
+    private double price;
 
     @OneToMany(mappedBy = "product")
     List<ProductStock> productStocks;
 
     @CreatedDate
-    LocalDateTime createdDate;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     @JsonIgnore
     @ManyToOne

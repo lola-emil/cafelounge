@@ -1,6 +1,8 @@
 package com.syntaxerror.cafelounge.controller;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,49 +32,70 @@ import jakarta.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    AuthenticationManager authManager;
+        @Autowired
+        AuthenticationManager authManager;
 
-    @Autowired
-    UserRepo userRepo;
+        @Autowired
+        UserRepo userRepo;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+        @Autowired
+        PasswordEncoder passwordEncoder;
 
-    @Autowired
-    JwtUtil jwtUtil;
+        @Autowired
+        JwtUtil jwtUtil;
 
-    @Value("${jwt.expiration}")
-    Long expirationMs;
+        @Value("${jwt.expiration}")
+        Long expirationMs;
 
-    @PostMapping("/signin")
-    ResponseEntity<String> signIn(
-            @RequestBody @Valid UserDTO userBody,
-            HttpServletResponse response) {
+        @PostMapping("/signin")
+        ResponseEntity<String> signIn(
+                        @RequestBody @Valid UserDTO userBody,
+                        HttpServletResponse response) {
 
-        Authentication authentication = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userBody.getUsername(),
-                        userBody.getPassword()));
+                Authentication authentication = authManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(
+                                                userBody.getUsername(),
+                                                userBody.getPassword()));
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String jwt = jwtUtil.generateToken(userDetails.getUsername());
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-        ResponseCookie cookie = ResponseCookie.from("token", jwt)
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(Duration.ofHours(expirationMs))
-                .sameSite("Lax")
-                .build();
+                ResponseCookie cookie = ResponseCookie.from("token", jwt)
+                                .httpOnly(true)
+                                .secure(false)
+                                .path("/")
+                                .maxAge(Duration.ofHours(expirationMs))
+                                .sameSite("Lax")
+                                .build();
 
-        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+                response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        return ResponseEntity.status(HttpStatus.OK).body("Login successful");
-    }
+                return ResponseEntity.status(HttpStatus.OK).body("Login successful");
+        }
 
-    @GetMapping("/profile")
-    ResponseEntity<?> currentUser(Authentication authentication) {
-            return ResponseEntity.ok(authentication.getName());
-    }
+        @GetMapping("/profile")
+        ResponseEntity<?> currentUser(Authentication authentication) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                Map<String, Object> profile = new HashMap<>();
+
+                profile.put("username", userDetails.getUsername());
+
+                return ResponseEntity.ok(profile);
+        }
+
+        @PostMapping("/logout")
+        ResponseEntity<?> logout(HttpServletResponse response) {
+                ResponseCookie deleteCookie = ResponseCookie.from("token", "")
+                                .httpOnly(true)
+                                .secure(false)
+                                .path("/")
+                                .maxAge(0)
+                                .sameSite("Lax")
+                                .build();
+
+                response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
+
+                return ResponseEntity.ok("Logged out");
+
+        }
 }

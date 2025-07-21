@@ -3,6 +3,8 @@ package com.syntaxerror.cafelounge.dto;
 import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+
 public class ProductDTO {
 
     private Long id;
