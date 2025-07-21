@@ -2,6 +2,8 @@ package com.syntaxerror.cafelounge.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +19,7 @@ public class UserRole {
 
     String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "userRole", cascade = CascadeType.ALL)
     List<User> users;
 

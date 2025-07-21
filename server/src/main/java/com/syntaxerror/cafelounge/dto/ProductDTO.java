@@ -7,7 +7,6 @@ public class ProductDTO {
 
     private Long id;
 
-    @NotBlank(message = "Product code is required")
     @Size(max = 50, message = "Product code must be at most 50 characters")
     private String productCode;
 
@@ -23,7 +22,6 @@ public class ProductDTO {
 
     private LocalDateTime createdDate;
 
-    private Long userId; // refers to the "added_by" user
 
     public Long getId() {
         return id;
@@ -71,13 +69,5 @@ public class ProductDTO {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }

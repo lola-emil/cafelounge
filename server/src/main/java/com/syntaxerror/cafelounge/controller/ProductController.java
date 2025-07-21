@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,8 +37,18 @@ public class ProductController {
     @Autowired
     UserRepo userRepo;
 
+    ProductDTO mapToDTO(Product product) {
+        ProductDTO dto = new ProductDTO();
+
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+
+        return dto;
+    }
+
     @GetMapping
-    public ResponseEntity<Page<Product>> getProducts(
+    public ResponseEntity<Page<ProductDTO>> getProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -44,7 +56,7 @@ public class ProductController {
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         PageRequest pageable = PageRequest.of(page, size, sort);
 
-        Page<Product> productPage = productRepo.findAll(pageable);
+        Page<ProductDTO> productPage = productRepo.findAll(pageable).map(this::mapToDTO);
 
         return ResponseEntity.ok(productPage);
     }
@@ -60,22 +72,18 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody @Valid ProductDTO productBody) {
+    public ResponseEntity<Product> addProduct(
+        @Valid @RequestBody ProductDTO productBody,
+        Authentication authenticattion) {
+        User user = userRepo.findByUsername(authenticattion.getName()).get();
+
         Product product = new Product();
 
         product.setProductCode(productBody.getProductCode());
         product.setName(productBody.getName());
         product.setDescription(productBody.getDescription());
         product.setPrice(productBody.getPrice());
-
-        if (productBody.getUserId() != null) {
-            Optional<User> user = userRepo.findById(productBody.getUserId());
-
-            if (!user.isPresent())
-                return ResponseEntity.notFound().build();
-
-            product.setUser(user.get());
-        }
+        product.setUser(user);
 
         Product savedProduct = productRepo.save(product);
 
@@ -110,4 +118,11 @@ public class ProductController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        productRepo.deleteById(id);
+
+        return ResponseEntity.ok("Deleted");
+    }
 }

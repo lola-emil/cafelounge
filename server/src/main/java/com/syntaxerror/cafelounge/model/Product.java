@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +35,7 @@ public class Product {
     @CreatedDate
     LocalDateTime createdDate;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "added_by")
     User user;
