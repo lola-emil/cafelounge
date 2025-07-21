@@ -10,8 +10,8 @@ const props = defineProps(["product", "description", "price", "img"]);
             </div>
 
             <p class="font-semibold">{{ props.product }}</p>
-            <p>{{ props.description }}</p>
-            <p class="font-semibold text-lg">{{ props.price }}</p>
+            <p>{{ props.description ?? "--" }}</p>
+            <p class="font-semibold text-lg">${{ props.price.toFixed(2) }}</p>
         </div>
     </div>
 </template>

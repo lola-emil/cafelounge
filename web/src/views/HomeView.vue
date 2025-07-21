@@ -179,7 +179,8 @@ onUnmounted(() => {
             </li>
           </ul>
 
-          <!-- Fixed-bottom summary INSIDE the card -->
+
+          <!-- SUMMARY -->
           <div class="mt-4 px-2">
             <div class="card bg-base-300">
               <div class="card-body p-3">
@@ -200,6 +201,8 @@ onUnmounted(() => {
                   <span>Total</span>
                   <span class="font-semibold">${{ summary.total }}</span>
                 </div>
+
+                <button class="w-full btn btn-sm mt-3 btn-primary">Checkout</button>
               </div>
             </div>
           </div>
@@ -208,5 +211,5 @@ onUnmounted(() => {
     </div>
   </main>
 
-  <AddProductModal ref="modalRef" />
+  <AddProductModal ref="modalRef" @product-added="fetchProducts()"/>
 </template>

@@ -18,5 +18,9 @@ export async function signIn(data: { username?: string; password?: string }) {
 }
 
 export async function getProfile() {
-  return await axiosInstance.get("/auth/profile");
+  return await axiosInstance.get<{username: string}>("/auth/profile");
+}
+
+export async function logout() {
+  return await axiosInstance.post<string>("/auth/logout");
 }

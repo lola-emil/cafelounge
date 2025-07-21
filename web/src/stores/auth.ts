@@ -1,20 +1,25 @@
-import type { User } from "@/services/auth-service";
+import { getProfile } from "@/services/auth-service";
 import { defineStore } from "pinia";
+
+interface Profile {
+  username: string;
+}
 
 export const useAuthStore = defineStore("auth", {
   state: (): {
-    user: User | null
+    user: Profile | null
   } => ({
     user: null,
   }),
 
   getters: {
-    isAuthenticated: (state) => !!state.user,
+    isAuthenticated: (state) => !!state.user
   },
 
   actions: {
-    async storeUser(user: User) {
-        this.user = user;
+    async fetchUser() {
+      const res = await getProfile();
+       this.user = res.data;
     }
   }
 });

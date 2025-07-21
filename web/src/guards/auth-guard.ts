@@ -2,20 +2,24 @@ import type { NavigationGuardNext, RouteLocationNormalizedGeneric } from "vue-ro
 import * as authService from "../services/auth-service";
 
 export default async function authGuard(
-  to: RouteLocationNormalizedGeneric,
-  from: RouteLocationNormalizedGeneric,
-  next: NavigationGuardNext
+    to: RouteLocationNormalizedGeneric,
+    from: RouteLocationNormalizedGeneric,
+    next: NavigationGuardNext
 ) {
+    console.log(to.path);
 
-    if (to.meta.protectedRoute) {
-        try {
-            const me = await authService.getProfile()
-            console.log(me.data);
+
+    try {
+        await authService.getProfile();
+
+        if (to.meta.protectedRoute)
             next();
-        } catch (error) {
+        if (to.path == "/signin")
+            next(from.path);
+    } catch (error) {
+        if (to.meta.protectedRoute)
             next("/signin");
-        }
-    } else {
-        next();
+        else
+            next();
     }
 }

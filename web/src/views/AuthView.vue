@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import * as authService from "../services/auth-service";
+import router from "@/router";
 
 
 let userData = reactive({
@@ -12,6 +13,7 @@ function login() {
     authService.signIn(userData)
     .then(data => {
         console.log(data);
+        router.push({path: "/"});
     }).catch(error => {
         console.log(error);
     });

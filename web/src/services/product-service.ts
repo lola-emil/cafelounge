@@ -4,6 +4,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  productCode: string;
 }
 
 export async function getProducts(signal?: AbortSignal) {
