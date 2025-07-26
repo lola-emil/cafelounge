@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AuthView from '@/views/AuthView.vue'
+import ReportView from "@/views/ReportView.vue";
 import authGuard from '@/guards/auth-guard'
 
 const router = createRouter({
@@ -13,6 +14,11 @@ const router = createRouter({
       meta: {
         protectedRoute: true
       }
+    },
+    {
+      path: "/reports",
+      name: "reports",
+      component: ReportView
     },
     {
       path: "/signin",

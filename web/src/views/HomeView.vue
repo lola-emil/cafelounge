@@ -2,24 +2,32 @@
 import ProductCard from "@/components/ProductCard.vue";
 import AddProductModal from "@/components/AddProductModal.vue";
 import Navbar from "@/components/Navbar.vue";
+import { useTitle } from "@vueuse/core";
 
-import { reactive, ref, onMounted, computed, onUnmounted } from "vue";
+import { reactive, ref, onMounted, computed, onUnmounted, onBeforeMount } from "vue";
 
 import * as productService from "../services/product-service";
 import axios from "axios";
+import { axiosInstance } from "@/utils/axiosInstance";
 
-// let itemCategories = ["Burgers", "Pizza", "Ice Cream", "Drink"];
+let title = useTitle();
 
 let products = ref<productService.Product[]>([]);
 let productsLoaded = ref<boolean>(false);
 let errorMessage = ref<string | null>(null);
 
-let cartItems = reactive<productService.Product[]>([]);
+let cartItems = reactive<{
+  product: Partial<productService.Product>,
+  quantity: number;
+}[]>([]);
 
 let productAbortController: AbortController | null = null;
 
 let summary = computed(() => {
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const subtotal = cartItems.reduce((sum, item) => (sum +
+    (item.product.price ?? 0) * item.quantity),
+    0);
+
   let discount = 0;
   let tax = 0;
 
@@ -32,7 +40,17 @@ let summary = computed(() => {
 });
 
 function addToCart(product: productService.Product) {
-  cartItems.push(product);
+  const matchedProduct = cartItems.findIndex((val, index) => val.product.id == product.id);
+
+  if (matchedProduct != -1) {
+    cartItems[matchedProduct].quantity += 1;
+  }
+  else {
+    cartItems.push({
+      product,
+      quantity: 1
+    });
+  }
 }
 
 function fetchProducts() {
@@ -59,6 +77,27 @@ function fetchProducts() {
     });
 }
 
+let checkingOut = ref<boolean>(false);
+
+function checkout() {
+
+  checkingOut.value = true;
+
+  axiosInstance.post("/checkout", {
+    checkoutItems: cartItems, paymentMethod: {
+      id: 1,
+      type: "Cash"
+    }
+  }).then(res => {
+    checkingOut.value = false;
+    console.log(res.data);
+  }).catch(err => {
+    checkingOut.value = false;
+    console.log(err);
+  });
+
+}
+
 
 let modalRef = ref<InstanceType<typeof AddProductModal> | null>(null);
 
@@ -66,9 +105,20 @@ function openModal() {
   modalRef.value?.open();
 }
 
-function closeModal() {
-  modalRef.value?.close();
+function appendProduct(product: productService.Product) {
+  products.value.push(product);
 }
+
+function incQty(index: number) {
+  cartItems[index].quantity += 1;
+}
+function decQty(index: number) {
+  cartItems[index].quantity -= 1;
+}
+
+onBeforeMount(() => {
+  title.value = "Point of Sale";
+})
 
 onMounted(async () => {
   fetchProducts();
@@ -138,7 +188,7 @@ onUnmounted(() => {
             <div class="card bg-base-300 skeleton" v-if="!productsLoaded" v-for="n in 6" :key="n">
             </div>
 
-            <ProductCard v-for="item in products" @click="addToCart(item)"
+            <ProductCard v-for="item in products" @on-add="addToCart(item)"
               img="https://cdn.prod.website-files.com/631b4b4e277091ef01450237/686e703d7cc50185a9667d87_BBQ_Brisket_1_Jr%20(1).jpg"
               :description="item.description" :product="item.name" :price="item.price" />
 
@@ -165,13 +215,26 @@ onUnmounted(() => {
           </div>
           <!-- Scrollable List -->
           <ul class="flex flex-col gap-3 mt-6 overflow-auto pr-1 flex-1">
-            <li v-for="item in cartItems" :key="item.id">
+            <li v-for="(item, index) in cartItems" :key="item.product.id">
               <div class="card bg-base-300">
                 <div class="card-body p-3">
-                  <div class="flex justify-between">
+                  <div class="flex justify-between items-center">
                     <div>
-                      <p>{{ item.name }}</p>
-                      <p class="font-semibold">{{ item.price }}</p>
+                      <p>{{ item.product.name }}</p>
+                      <p class="text-sm">${{ item.product.price }} <span>x {{
+                        item.quantity }}</span>
+                      </p>
+                    </div>
+                    <div>
+                      <div>
+                        <p class="font-semibold">${{ (item.product.price ?? 0) * item.quantity }}</p>
+                      </div>
+                      <div class="flex">
+                        <button class="btn btn-xs" @click="decQty(index)" :disabled="checkingOut">-</button>
+                        <input type="text" class="input input-xs w-14 text-center" :disabled="checkingOut"
+                          v-model="item.quantity">
+                        <button class="btn btn-xs" @click="incQty(index)" :disabled="checkingOut">+</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -202,7 +265,9 @@ onUnmounted(() => {
                   <span class="font-semibold">${{ summary.total }}</span>
                 </div>
 
-                <button class="w-full btn btn-sm mt-3 btn-primary">Checkout</button>
+                <button class="w-full btn btn-sm mt-3 btn-primary" @click="checkout()" :disabled="checkingOut">
+                  {{ checkingOut ? "Loading" : "Checkout" }}
+                </button>
               </div>
             </div>
           </div>
@@ -211,5 +276,5 @@ onUnmounted(() => {
     </div>
   </main>
 
-  <AddProductModal ref="modalRef" @product-added="fetchProducts()"/>
+  <AddProductModal ref="modalRef" @product-added="appendProduct" />
 </template>

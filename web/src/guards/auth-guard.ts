@@ -6,8 +6,6 @@ export default async function authGuard(
     from: RouteLocationNormalizedGeneric,
     next: NavigationGuardNext
 ) {
-    console.log(to.path);
-
 
     try {
         await authService.getProfile();
@@ -22,4 +20,6 @@ export default async function authGuard(
         else
             next();
     }
+
+    next();
 }

@@ -4,7 +4,7 @@ import AppsIcon from './icons/AppsIcon.vue';
 
 import * as authService from "../services/auth-service";
 import router from '@/router';
-
+import { RouterLink } from 'vue-router';
 
 async function logout() {
     const res = await authService.logout();
@@ -29,14 +29,18 @@ async function logout() {
                 </button>
 
                 <ul tabindex="0" class="dropdown-content menu bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm">
-                    <li><a>
+                    <li>
+                        <RouterLink to="/">
                             <AppsIcon />
                             Point of Sales
-                        </a></li>
-                    <li><a>
+                        </RouterLink>
+                    </li>
+                    <li>
+                        <RouterLink to="/reports">
                             <Trend />
                             Reports
-                        </a></li>
+                        </RouterLink>
+                    </li>
                 </ul>
             </div>
         </div>

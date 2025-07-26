@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import * as productService from "../services/product-service";
+import SearchDropdown from "./SearchDropdown.vue";
 
 const emit = defineEmits(["product-added"]);
 
@@ -26,12 +27,18 @@ let productError = reactive<Partial<{
 
 function submit() {
     isLoading.value = true;
+
+    console.log(productForm);
     productService.addProduct(productForm)
         .then(data => {
             isLoading.value = false;
             emit("product-added", data);
+
+            console.log("Ang data", data);
             close();
         }).catch(error => {
+
+            alert("naay error");
             isLoading.value = false;
 
             // Clear previous errors
@@ -40,9 +47,9 @@ function submit() {
             });
 
             // Assign new errors while keeping reactivity
-            Object.assign(productError, error.response.data);
+            Object.assign(productError, error.response?.data);
 
-            console.log(productError);
+            console.log("What is this error", error);
         });
 }
 
@@ -93,6 +100,8 @@ defineExpose({ open, close });
                     }" placeholder="Price">
                     <p class="label text-error">{{ productError.price }}</p>
                 </fieldset>
+
+                <SearchDropdown :items="[]" v-model="productForm.category" />
 
             </div>
             <div class="modal-action">
