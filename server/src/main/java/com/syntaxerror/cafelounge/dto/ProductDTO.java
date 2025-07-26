@@ -10,7 +10,7 @@ public class ProductDTO {
     private Long id;
 
     @Size(max = 50, message = "Product code must be at most 50 characters")
-    private String productCode;
+    private String sku;
 
     @NotBlank(message = "Name is required")
     @Size(max = 100, message = "Name must be at most 100 characters")
@@ -22,6 +22,7 @@ public class ProductDTO {
     @Positive(message = "Price must be positive")
     private double price;
 
+    @CreatedDate
     private LocalDateTime createdDate;
 
 
@@ -31,14 +32,6 @@ public class ProductDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
     }
 
     public String getName() {
@@ -71,5 +64,13 @@ public class ProductDTO {
 
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 }

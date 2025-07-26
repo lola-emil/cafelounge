@@ -1,5 +1,6 @@
 package com.syntaxerror.cafelounge.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,25 +14,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.syntaxerror.cafelounge.dto.CheckoutDTO;
+import com.syntaxerror.cafelounge.mapper.CheckoutMapper;
 import com.syntaxerror.cafelounge.model.Checkout;
+import com.syntaxerror.cafelounge.model.PaymentMethod;
 import com.syntaxerror.cafelounge.repo.CheckoutRepo;
+import com.syntaxerror.cafelounge.repo.PaymentMethodRepo;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/checkout")
 public class CheckoutController {
-    
+
     @Autowired
     CheckoutRepo checkoutRepo;
 
+    @Autowired
+    PaymentMethodRepo paymentMethodRepo;
+
+    @GetMapping
+    ResponseEntity<List<Checkout>> getCheckoutHistory() {
+
+        List<Checkout> history = checkoutRepo.findAll();
+
+        return ResponseEntity.ok(history);
+    }
+
     @PostMapping
     ResponseEntity<Checkout> addCheckout(@RequestBody @Valid CheckoutDTO checkoutBody) {
-        Checkout checkout = new Checkout();
+        Optional<PaymentMethod> paymentMethod = paymentMethodRepo.findById((long) 1);
 
-        // TODO: build ang checkout
+        Checkout checkout = CheckoutMapper.toEntity(checkoutBody);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(checkout);
+        checkout.setPaymentMethod(paymentMethod.get());
+
+        Checkout newCheckout = checkoutRepo.save(checkout);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(newCheckout);
     }
 
     @GetMapping("/{id}")

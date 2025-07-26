@@ -3,10 +3,51 @@ package com.syntaxerror.cafelounge.dto;
 import java.util.List;
 
 public class PaymentMethodDTO {
-    Long id;
+    private Long id;
 
-    String name;
-    String description;
+    private String name;
+    private String type;
+    private String description;
 
-    List<CheckoutDTO> checkouts;
+    private List<CheckoutDTO> checkouts;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<CheckoutDTO> getCheckouts() {
+        return checkouts;
+    }
+
+    public void setCheckouts(List<CheckoutDTO> checkouts) {
+        this.checkouts = checkouts;
+    }
 }

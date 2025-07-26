@@ -3,6 +3,7 @@ package com.syntaxerror.cafelounge.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.syntaxerror.cafelounge.model.User;
+import com.syntaxerror.cafelounge.model.UserRole;
+import com.syntaxerror.cafelounge.repo.UserRepo;
 import com.syntaxerror.cafelounge.repo.UserRoleRepo;
 import com.syntaxerror.cafelounge.service.AuthService;
 import com.syntaxerror.cafelounge.util.AuthEntryPointJwt;
@@ -57,7 +61,7 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
@@ -79,10 +83,25 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/**").permitAll() // Use 'requestMatchers' instead
-                                                                                  // of 'antMatchers'
+                                                                 // of 'antMatchers'
                         .anyRequest().authenticated());
         // Add the JWT Token filter before the UsernamePasswordAuthenticationFilter
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+    @Bean
+    public CommandLineRunner init(UserRepo repo, PasswordEncoder encoder) {
+        return args -> {
+            if (repo.findByUsername("admin").isEmpty()) {
+
+
+                User user = new User();
+                user.setUsername("admin");
+                user.setPassword(encoder.encode("letmein123"));
+                repo.save(user);
+            }
+        };
+    }
+
 }

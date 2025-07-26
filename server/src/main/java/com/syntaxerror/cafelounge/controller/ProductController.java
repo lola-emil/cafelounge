@@ -2,6 +2,7 @@ package com.syntaxerror.cafelounge.controller;
 
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,16 +38,12 @@ public class ProductController {
     @Autowired
     UserRepo userRepo;
 
-    ProductDTO mapToDTO(Product product) {
-        ProductDTO dto = new ProductDTO();
+    @Autowired
+    ModelMapper modelMapper;
 
-        dto.setId(product.getId());
-        dto.setName(product.getName());
-        dto.setDescription(product.getDescription());
-        dto.setPrice(product.getPrice());
-        dto.setProductCode(product.getProductCode());
-        
-        return dto;
+    private ProductDTO converToDto(Product product) {
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        return productDTO;
     }
 
     @GetMapping
@@ -58,7 +55,7 @@ public class ProductController {
         Sort sort = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         PageRequest pageable = PageRequest.of(page, size, sort);
 
-        Page<ProductDTO> productPage = productRepo.findAll(pageable).map(this::mapToDTO);
+        Page<ProductDTO> productPage = productRepo.findAll(pageable).map(this::converToDto);
 
         return ResponseEntity.ok(productPage);
     }
@@ -81,7 +78,7 @@ public class ProductController {
 
         Product product = new Product();
 
-        product.setProductCode(productBody.getProductCode());
+        product.setSku(productBody.getSku());
         product.setName(productBody.getName());
         product.setDescription(productBody.getDescription());
         product.setPrice(productBody.getPrice());
@@ -102,8 +99,8 @@ public class ProductController {
 
         Product product = optionalProduct.get();
 
-        if (productBody.getProductCode() != null) {
-            product.setProductCode(productBody.getProductCode());
+        if (productBody.getSku() != null) {
+            product.setSku(productBody.getSku());
         }
         if (productBody.getName() != null) {
             product.setName(productBody.getName());

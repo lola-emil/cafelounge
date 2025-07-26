@@ -22,9 +22,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String productCode;
+    private String sku;
 
     private String name;
+
+    private String image;
 
     private String description;
 
@@ -42,6 +44,13 @@ public class Product {
     @JoinColumn(name = "added_by")
     User user;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    private List<CheckoutItem> checkoutItems;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private ProductCategory category;
 
     public Long getId() {
         return id;
@@ -51,12 +60,12 @@ public class Product {
         this.id = id;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getSku() {
+        return sku;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setSku(String productCode) {
+        this.sku = productCode;
     }
 
     public String getName() {
@@ -105,6 +114,30 @@ public class Product {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<CheckoutItem> getCheckoutItems() {
+        return checkoutItems;
+    }
+
+    public void setCheckoutItems(List<CheckoutItem> checkoutItems) {
+        this.checkoutItems = checkoutItems;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }

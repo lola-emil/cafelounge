@@ -1,10 +1,42 @@
 package com.syntaxerror.cafelounge.dto;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public class CheckoutDTO {
-    Long id;
+    private Long id;
 
-    PaymentMethodDTO paymentMethod;
+    @NotNull
+    @Valid
+    private PaymentMethodDTO paymentMethod;
 
-    CartDTO cart;
+    @NotNull
+    @Valid
+    private List<CheckoutItemDTO> checkoutItems;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public PaymentMethodDTO getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethodDTO paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public List<CheckoutItemDTO> getCheckoutItems() {
+        return checkoutItems;
+    }
+
+    public void setCheckoutItems(List<CheckoutItemDTO> checkoutItems) {
+        this.checkoutItems = checkoutItems;
+    }
 }
