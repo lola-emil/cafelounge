@@ -7,6 +7,7 @@ const emit = defineEmits(["product-added"]);
 
 let dialogRef = ref<HTMLDialogElement | null>(null);
 let isLoading = ref<boolean>(false);
+let category = ref<string>("");
 
 function open() {
     dialogRef.value?.showModal();
@@ -16,7 +17,11 @@ function close() {
     dialogRef.value?.close();
 }
 
-let productForm = reactive<Partial<productService.Product>>({});
+let productForm = reactive<Partial<productService.Product>>({
+    category: {
+        name: ""
+    }
+});
 
 let productError = reactive<Partial<{
     name: string;
@@ -28,17 +33,15 @@ let productError = reactive<Partial<{
 function submit() {
     isLoading.value = true;
 
-    console.log(productForm);
     productService.addProduct(productForm)
         .then(data => {
             isLoading.value = false;
             emit("product-added", data);
-
             console.log("Ang data", data);
-            close();
+            // close();
         }).catch(error => {
 
-            alert("naay error");
+            // alert("naay error");
             isLoading.value = false;
 
             // Clear previous errors
@@ -101,7 +104,10 @@ defineExpose({ open, close });
                     <p class="label text-error">{{ productError.price }}</p>
                 </fieldset>
 
-                <SearchDropdown :items="[]" v-model="productForm.category" />
+                <SearchDropdown :items="[{
+                    name: 'Burger',
+                    value: 'Burger'
+                }]" label="Category" v-model="productForm.category!.name!" />
 
             </div>
             <div class="modal-action">

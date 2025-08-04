@@ -24,6 +24,7 @@ public class Checkout {
 
     @ManyToOne
     @JoinColumn(name = "payment_method_id")
+    @JsonManagedReference
     private PaymentMethod paymentMethod;
 
     @JsonIgnore
@@ -34,6 +35,12 @@ public class Checkout {
     @OneToMany(mappedBy = "checkout", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<CheckoutItem> checkoutItems;
+
+    @ManyToOne
+    @JoinColumn(name = "cashier_id")
+    private User cashier;
+
+    
 
     public Long getId() {
         return id;
@@ -65,5 +72,13 @@ public class Checkout {
 
     public void setCheckoutItems(List<CheckoutItem> checkoutItems) {
         this.checkoutItems = checkoutItems;
+    }
+
+    public User getCashier() {
+        return cashier;
+    }
+
+    public void setCashier(User cashier) {
+        this.cashier = cashier;
     }
 }

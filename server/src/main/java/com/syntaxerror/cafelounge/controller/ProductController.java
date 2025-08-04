@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syntaxerror.cafelounge.dto.ProductDTO;
 import com.syntaxerror.cafelounge.model.Product;
+import com.syntaxerror.cafelounge.model.ProductCategory;
 import com.syntaxerror.cafelounge.model.User;
+import com.syntaxerror.cafelounge.repo.ProductCategoryRepo;
 import com.syntaxerror.cafelounge.repo.ProductRepo;
 import com.syntaxerror.cafelounge.repo.UserRepo;
 
@@ -36,10 +39,16 @@ public class ProductController {
     ProductRepo productRepo;
 
     @Autowired
+    ProductCategoryRepo productCategoryRepo;
+
+    @Autowired
     UserRepo userRepo;
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     private ProductDTO converToDto(Product product) {
         ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
@@ -66,23 +75,46 @@ public class ProductController {
 
         if (!product.isPresent())
             return ResponseEntity.notFound().build();
-        
+
         return ResponseEntity.status(HttpStatus.OK).body(product.get());
     }
 
     @PostMapping
     public ResponseEntity<Product> addProduct(
-        @Valid @RequestBody ProductDTO productBody,
-        Authentication authenticattion) {
-        User user = userRepo.findByUsername(authenticattion.getName()).get();
+            @Valid @RequestBody ProductDTO productBody,
+            Authentication authentication) {
 
+        User user = userRepo.findByUsername(authentication.getName()).get();
+        
+        Optional<ProductCategory> category = productCategoryRepo.findByName(productBody.getCategory().getName());
+
+        
         Product product = new Product();
-
+        
         product.setSku(productBody.getSku());
         product.setName(productBody.getName());
         product.setDescription(productBody.getDescription());
         product.setPrice(productBody.getPrice());
         product.setUser(user);
+
+        if (!category.isPresent()) {
+            ProductCategory productCategory = new ProductCategory();
+
+            productCategory.setName(productBody.getCategory().getName());
+            ProductCategory newCategory = productCategoryRepo.save(productCategory);
+
+            product.setCategory(newCategory);
+
+        } else {
+            product.setCategory(category.get());
+        }
+        
+        try {
+            String json = objectMapper.writeValueAsString(productBody);
+            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Product savedProduct = productRepo.save(product);
 
@@ -116,7 +148,6 @@ public class ProductController {
 
         return ResponseEntity.ok(updatedProduct);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {

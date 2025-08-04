@@ -25,6 +25,9 @@ public class ProductDTO {
     @CreatedDate
     private LocalDateTime createdDate;
 
+    @NotNull
+    private ProductCategoryDTO category;
+
 
     public Long getId() {
         return id;
@@ -72,5 +75,13 @@ public class ProductDTO {
 
     public void setSku(String sku) {
         this.sku = sku;
+    }
+
+    public ProductCategoryDTO getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategoryDTO category) {
+        this.category = category;
     }
 }

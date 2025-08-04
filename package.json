@@ -1,0 +1,14 @@
+{
+  "name": "cafelounge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:lola-emil/cafelounge.git",
+  "author": "Rens Saladaga <staleexam19@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev:boot": "cd server && mvn spring-boot:run",
+    "dev:web": "cd web && yarn dev"
+  },
+  "devDependencies": {}
+}

@@ -2,6 +2,8 @@ package com.syntaxerror.cafelounge.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +22,7 @@ public class PaymentMethod {
     private String description;
 
     @OneToMany(mappedBy = "paymentMethod", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Checkout> checkouts;
 
     public Long getId() {

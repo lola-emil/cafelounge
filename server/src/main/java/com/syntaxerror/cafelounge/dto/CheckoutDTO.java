@@ -16,6 +16,8 @@ public class CheckoutDTO {
     @Valid
     private List<CheckoutItemDTO> checkoutItems;
 
+    private UserDTO cashier;
+
     public Long getId() {
         return id;
     }
@@ -38,5 +40,13 @@ public class CheckoutDTO {
 
     public void setCheckoutItems(List<CheckoutItemDTO> checkoutItems) {
         this.checkoutItems = checkoutItems;
+    }
+
+    public UserDTO getCashier() {
+        return cashier;
+    }
+
+    public void setCashier(UserDTO cashier) {
+        this.cashier = cashier;
     }
 }

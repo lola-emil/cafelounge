@@ -15,28 +15,30 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 
-    String username;
+    private String username;
 
     @JsonIgnore
-    String password;
-    
-    @ManyToOne  
+    private String password;
+
+    @ManyToOne
     @JoinColumn(name = "role_id")
-    UserRole userRole;
+    private UserRole userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Product> products;
+    private List<Product> products;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<Cart> carts;
+    private List<Cart> carts;
 
+    @OneToMany(mappedBy = "cashier", cascade = CascadeType.ALL)
+    private List<Checkout> checkouts;
 
     public Long getId() {
         return id;

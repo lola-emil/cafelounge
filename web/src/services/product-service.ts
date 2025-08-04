@@ -1,11 +1,12 @@
 import { axiosInstance } from "@/utils/axiosInstance";
+import type { ProductCategory } from "./product-category-service";
 export interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
   productCode: string;
-  category: string;
+  category: Partial<ProductCategory>;
 }
 
 export async function getProducts(signal?: AbortSignal) {
