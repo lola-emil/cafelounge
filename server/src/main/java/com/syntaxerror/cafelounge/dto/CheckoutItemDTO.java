@@ -1,42 +1,45 @@
 package com.syntaxerror.cafelounge.dto;
 
-import jakarta.validation.constraints.*;
+import com.syntaxerror.cafelounge.model.Checkout;
+import com.syntaxerror.cafelounge.model.CheckoutItem;
+import com.syntaxerror.cafelounge.model.Product;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class CheckoutItemDTO {
-
     private Long id;
 
-    @NotNull(message = "Product must not be null")
-    private ProductDTO product;
+    @NotNull
+    @Valid
+    private Checkout checkout;
 
-    // @Min(value = 1, message = "Quantity must be at least 1")
+    @NotNull
+    @Valid
+    private Product product;
+
+    @NotNull
+    @Positive
     private int quantity;
 
-    // @DecimalMin(value = "0.0", inclusive = true, message = "Discount cannot be negative")
-    private double discount;
-
-    // @DecimalMin(value = "0.0", inclusive = true, message = "Unit price cannot be negative")
+    @NotNull
+    @PositiveOrZero
     private double unitPrice;
 
-    // @NotBlank(message = "Product name must not be blank")
-    // @Size(max = 255, message = "Product name must be at most 255 characters")
-    private String productName;
+    @NotNull
+    private double totalPrice;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
+    public CheckoutItemDTO() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ProductDTO getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductDTO product) {
-        this.product = product;
+    public CheckoutItemDTO(CheckoutItem item) {
+        this.id = item.getId();
+        this.checkout = item.getCheckout();
+        this.quantity = item.getQuantity();
+        this.unitPrice = item.getUnitPrice();
+        this.totalPrice = item.getTotalPrice();
     }
 
     public int getQuantity() {
@@ -47,14 +50,6 @@ public class CheckoutItemDTO {
         this.quantity = quantity;
     }
 
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
     public double getUnitPrice() {
         return unitPrice;
     }
@@ -63,11 +58,37 @@ public class CheckoutItemDTO {
         this.unitPrice = unitPrice;
     }
 
-    public String getProductName() {
-        return productName;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Checkout getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(Checkout checkout) {
+        this.checkout = checkout;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    // Getters and setters
 }

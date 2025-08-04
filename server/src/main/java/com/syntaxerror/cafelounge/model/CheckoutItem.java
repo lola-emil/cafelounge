@@ -1,14 +1,8 @@
 package com.syntaxerror.cafelounge.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.syntaxerror.cafelounge.dto.CheckoutItemDTO;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class CheckoutItem {
@@ -17,23 +11,30 @@ public class CheckoutItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "checkout_id")
-    @JsonBackReference
     private Checkout checkout;
 
-    @JsonIgnore
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "product_id")
     private Product product;
 
     private int quantity;
-
-    private double discount;
-
     private double unitPrice;
+    private double totalPrice;
 
-    private String productName;
+    // Constructor to auto-calculate total
+    public CheckoutItem(CheckoutItemDTO dto) {
+        this.id = dto.getId();
+        this.checkout = dto.getCheckout();
+        this.product = dto.getProduct();
+        this.quantity = dto.getQuantity();
+        this.unitPrice = product.getUnitPrice();
+        this.totalPrice = unitPrice * quantity;
+    }
+
+    public CheckoutItem() {
+    }
 
     public Long getId() {
         return id;
@@ -67,14 +68,6 @@ public class CheckoutItem {
         this.quantity = quantity;
     }
 
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double discount) {
-        this.discount = discount;
-    }
-
     public double getUnitPrice() {
         return unitPrice;
     }
@@ -83,11 +76,12 @@ public class CheckoutItem {
         this.unitPrice = unitPrice;
     }
 
-    public String getProductName() {
-        return productName;
+    public double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
+
 }

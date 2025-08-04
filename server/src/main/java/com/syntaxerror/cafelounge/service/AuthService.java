@@ -14,7 +14,7 @@ import com.syntaxerror.cafelounge.model.User;
 
 @Service
 public class AuthService implements UserDetailsService {
-    @Autowired    
+    @Autowired
     private UserRepo userRepo;
 
     @Override
@@ -29,7 +29,6 @@ public class AuthService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 matchedUser.getUsername(),
                 matchedUser.getPassword(),
-                Collections.emptyList()
-        );
+                Collections.emptyList());
     }
 }

@@ -18,6 +18,11 @@ public class ProductCategory {
 
     private String name;
 
+    private String description;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
+
     public Long getId() {
         return id;
     }
@@ -34,7 +39,20 @@ public class ProductCategory {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    List<Product> products;    
-    
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
 }

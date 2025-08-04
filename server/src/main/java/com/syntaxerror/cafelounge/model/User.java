@@ -1,17 +1,9 @@
 package com.syntaxerror.cafelounge.model;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -24,21 +16,7 @@ public class User {
 
     private String username;
 
-    @JsonIgnore
     private String password;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private UserRole userRole;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Product> products;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Cart> carts;
-
-    @OneToMany(mappedBy = "cashier", cascade = CascadeType.ALL)
-    private List<Checkout> checkouts;
 
     public Long getId() {
         return id;
@@ -72,11 +50,4 @@ public class User {
         this.password = password;
     }
 
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
 }

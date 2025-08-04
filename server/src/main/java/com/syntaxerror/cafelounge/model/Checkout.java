@@ -1,46 +1,32 @@
 package com.syntaxerror.cafelounge.model;
 
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Checkout {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private LocalDateTime checkoutTime;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_method_id")
-    @JsonManagedReference
-    private PaymentMethod paymentMethod;
+    private double totalAmount;
+    private double taxAmount;
+    private double discountAmount;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id", referencedColumnName = "id")
-    private Cart cart;
+    private String paymentMethod; // e.g., "CASH", "CARD", "MOBILE"
+
+    private String cashierName; // or a reference to a User entity if you have one
 
     @OneToMany(mappedBy = "checkout", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<CheckoutItem> checkoutItems;
+    private List<CheckoutItem> items;
 
-    @ManyToOne
-    @JoinColumn(name = "cashier_id")
-    private User cashier;
-
-    
+    public Checkout() {
+        this.checkoutTime = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -50,35 +36,60 @@ public class Checkout {
         this.id = id;
     }
 
-    public PaymentMethod getPaymentMethod() {
+    public LocalDateTime getCheckoutTime() {
+        return checkoutTime;
+    }
+
+    public void setCheckoutTime(LocalDateTime checkoutTime) {
+        this.checkoutTime = checkoutTime;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public double getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(double taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public String getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
+    public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
-    public Cart getCart() {
-        return cart;
+    public String getCashierName() {
+        return cashierName;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCashierName(String cashierName) {
+        this.cashierName = cashierName;
     }
 
-    public List<CheckoutItem> getCheckoutItems() {
-        return checkoutItems;
+    public List<CheckoutItem> getItems() {
+        return items;
     }
 
-    public void setCheckoutItems(List<CheckoutItem> checkoutItems) {
-        this.checkoutItems = checkoutItems;
+    public void setItems(List<CheckoutItem> items) {
+        this.items = items;
     }
 
-    public User getCashier() {
-        return cashier;
-    }
-
-    public void setCashier(User cashier) {
-        this.cashier = cashier;
-    }
 }
