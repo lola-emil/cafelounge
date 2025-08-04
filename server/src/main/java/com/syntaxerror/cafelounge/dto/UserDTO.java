@@ -1,19 +1,22 @@
 package com.syntaxerror.cafelounge.dto;
 
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 public class UserDTO {
+
+    private Long id;
+
     private String name;
 
-    @NotBlank
-    @NotNull
     private String username;
 
-    @NotBlank
-    @NotNull
     private String password;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -38,4 +41,5 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+    
 }

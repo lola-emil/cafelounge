@@ -1,54 +1,23 @@
 package com.syntaxerror.cafelounge.dto;
 
-import com.syntaxerror.cafelounge.model.Product;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-public class ProductDTO {
-    private Long id;
+public class UpdateProductDTO {
 
-    @NotNull
     @NotBlank
-    @Max(value = 255)
     private String name;
 
+    @NotBlank
     private String description;
 
-    @NotNull
     @NotBlank
-    @Max(value = 255)
     private String sku;
 
     @PositiveOrZero
     private double unitPrice;
-
+    
     private boolean isActive;
-
-    @NotNull
-    @Valid
-    private ProductCategoryDTO productCategory;
-
-    public ProductDTO() {
-    }
-
-    public ProductDTO(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.sku = product.getSku();
-        this.unitPrice = product.getUnitPrice();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -88,13 +57,5 @@ public class ProductDTO {
 
     public void setActive(boolean isActive) {
         this.isActive = isActive;
-    }
-
-    public ProductCategoryDTO getProductCategory() {
-        return productCategory;
-    }
-
-    public void setProductCategory(ProductCategoryDTO productCategory) {
-        this.productCategory = productCategory;
     }
 }

@@ -1,13 +1,8 @@
 package com.syntaxerror.cafelounge.model;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.data.annotation.CreatedDate;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,39 +13,27 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sku;
-
     private String name;
-
-    private String image;
 
     private String description;
 
-    private double price;
+    private String sku;
 
-    @OneToMany(mappedBy = "product")
-    List<ProductStock> productStocks;
+    private double unitPrice;
 
-    @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate = LocalDateTime.now();
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "added_by")
-    User user;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "product")
-    private List<CheckoutItem> checkoutItems;
+    private boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private ProductCategory category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductStockHistory> productStockHistories;
 
     public Long getId() {
         return id;
@@ -58,14 +41,6 @@ public class Product {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String productCode) {
-        this.sku = productCode;
     }
 
     public String getName() {
@@ -84,44 +59,28 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
-        return price;
+    public String getSku() {
+        return sku;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
-    public List<ProductStock> getProductStocks() {
-        return productStocks;
+    public double getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setProductStocks(List<ProductStock> productStocks) {
-        this.productStocks = productStocks;
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<CheckoutItem> getCheckoutItems() {
-        return checkoutItems;
-    }
-
-    public void setCheckoutItems(List<CheckoutItem> checkoutItems) {
-        this.checkoutItems = checkoutItems;
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public ProductCategory getCategory() {
@@ -130,14 +89,6 @@ public class Product {
 
     public void setCategory(ProductCategory category) {
         this.category = category;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
 }

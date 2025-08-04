@@ -20,9 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.syntaxerror.cafelounge.model.User;
-import com.syntaxerror.cafelounge.model.UserRole;
 import com.syntaxerror.cafelounge.repo.UserRepo;
-import com.syntaxerror.cafelounge.repo.UserRoleRepo;
 import com.syntaxerror.cafelounge.service.AuthService;
 import com.syntaxerror.cafelounge.util.AuthEntryPointJwt;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -32,9 +30,6 @@ public class WebSecurityConfig {
 
     @Autowired
     AuthService userDetailsService;
-
-    @Autowired
-    UserRoleRepo userRoleRepo;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
