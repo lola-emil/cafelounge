@@ -23,19 +23,6 @@ public class CheckoutItem {
     private double unitPrice;
     private double totalPrice;
 
-    // Constructor to auto-calculate total
-    public CheckoutItem(CheckoutItemDTO dto) {
-        this.id = dto.getId();
-        this.checkout = dto.getCheckout();
-        this.product = dto.getProduct();
-        this.quantity = dto.getQuantity();
-        this.unitPrice = product.getUnitPrice();
-        this.totalPrice = unitPrice * quantity;
-    }
-
-    public CheckoutItem() {
-    }
-
     public Long getId() {
         return id;
     }

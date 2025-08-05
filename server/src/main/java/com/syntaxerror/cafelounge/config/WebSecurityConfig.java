@@ -68,6 +68,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("What the fuck is this shit");
         // Updated configuration for Spring Security 6.x
         http
                 .csrf(csrf -> csrf.disable()) // Disable CSRF

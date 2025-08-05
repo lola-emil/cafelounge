@@ -13,8 +13,10 @@ public class CheckoutItemMapper {
         return checkoutItem;
     }
 
-    public static CheckoutItemDTO toDTO() {
+    public static CheckoutItemDTO toDTO(CheckoutItem item) {
         CheckoutItemDTO checkoutItemDTO = new CheckoutItemDTO();
+
+        checkoutItemDTO.setId(item.getId());
 
         return checkoutItemDTO;
     }

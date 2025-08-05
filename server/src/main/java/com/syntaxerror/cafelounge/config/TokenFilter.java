@@ -44,9 +44,11 @@ public class TokenFilter extends AuthTokenFilter {
                     jwt = cookie.getValue();
                 }
             }
+            System.out.println("Fucking token not present");
         }
 
         if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
+            System.out.println("Fucking token not present");
             String username = jwtUtil.getUsernameFromToken(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
