@@ -3,26 +3,27 @@ package com.syntaxerror.cafelounge.dto;
 import com.syntaxerror.cafelounge.model.Product;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
     private Long id;
 
     @NotNull
     @NotBlank
-    @Max(value = 255)
+    @Size(max = 255, message = "name is only limited to 255 characters")
     private String name;
 
     private String description;
 
     @NotNull
     @NotBlank
-    @Max(value = 255)
+    @Size(max = 255, message = "sku is only limited to 255 characters")
     private String sku;
 
+    @NotNull
     @PositiveOrZero
     private double unitPrice;
 

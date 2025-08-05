@@ -19,16 +19,21 @@ import com.syntaxerror.cafelounge.dto.ProductDTO;
 import com.syntaxerror.cafelounge.dto.UpdateProductDTO;
 import com.syntaxerror.cafelounge.mapper.ProductMapper;
 import com.syntaxerror.cafelounge.model.Product;
+import com.syntaxerror.cafelounge.model.ProductCategory;
+import com.syntaxerror.cafelounge.repo.ProductCategoryRepo;
 import com.syntaxerror.cafelounge.repo.ProductRepo;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
-    ProductRepo productRepo;
+    private ProductRepo productRepo;
+
+    @Autowired
+    private ProductCategoryRepo productCategoryRepo;
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getProducts() {
@@ -54,6 +59,13 @@ public class ProductController {
     public ResponseEntity<ProductDTO> addProduct(
             @RequestBody @Valid ProductDTO productDTO) {
         Product product = ProductMapper.toEntity(productDTO);
+
+        ProductCategory productCategory = product.getCategory();
+
+        if (productCategory.getId() == null) {
+            ProductCategory newCategory = productCategoryRepo.save(productCategory);
+            product.setCategory(newCategory);
+        }
 
         Product newProduct = productRepo.save(product);
 

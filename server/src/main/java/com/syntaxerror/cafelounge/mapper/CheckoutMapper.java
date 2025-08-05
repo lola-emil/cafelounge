@@ -3,9 +3,7 @@ package com.syntaxerror.cafelounge.mapper;
 import java.util.stream.Collectors;
 
 import com.syntaxerror.cafelounge.dto.CheckoutDTO;
-import com.syntaxerror.cafelounge.dto.CheckoutItemDTO;
 import com.syntaxerror.cafelounge.model.Checkout;
-import com.syntaxerror.cafelounge.model.CheckoutItem;
 
 public class CheckoutMapper {
 
@@ -19,7 +17,7 @@ public class CheckoutMapper {
         checkoutDTO.setDiscountAmount(checkout.getDiscountAmount());
         checkoutDTO.setPaymentMethod(checkout.getPaymentMethod());
         checkoutDTO.setCashierName(checkout.getCashierName());
-        checkoutDTO.setItems(checkout.getItems().stream().map(CheckoutItemDTO::new)
+        checkoutDTO.setItems(checkout.getItems().stream().map(CheckoutItemMapper::toDTO)
                 .collect(Collectors.toList()));
 
         return checkoutDTO;
@@ -35,7 +33,7 @@ public class CheckoutMapper {
         checkout.setDiscountAmount(checkoutDTO.getDiscountAmount());
         checkout.setPaymentMethod(checkoutDTO.getPaymentMethod());
         checkout.setCashierName(checkoutDTO.getCashierName());
-        checkout.setItems(checkoutDTO.getItems().stream().map(CheckoutItem::new)
+        checkout.setItems(checkoutDTO.getItems().stream().map(CheckoutItemMapper::toEntity)
                 .collect(Collectors.toList()));
 
         return checkout;
